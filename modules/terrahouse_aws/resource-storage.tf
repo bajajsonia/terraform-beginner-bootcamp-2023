@@ -28,6 +28,10 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
    key    = "index.html"
    source = var.index_html_filepath
    content_type = "text/html"
+   lifecycle {
+    replace_triggered_by = [terraform_data.content_version.output]
+    ignore_changes = [etag]
+  }
    etag = filemd5(var.index_html_filepath)
 }
 
@@ -61,4 +65,8 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
       }
     }
   })
+}
+
+resource "terraform_data" "content_version" {
+  input = var.content_version
 }
