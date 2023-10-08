@@ -221,6 +221,13 @@ class TerraTownsMockServer < Sinatra::Base
     unless home.valid?
       error 422, home.errors.messages.to_json
     end
+    # Saving update data in global variable
+    home = Home.new
+    home.town = $home[:town]
+    home.domain_name = $home[:domain_name]
+    home.name = name
+    home.description = description
+    home.content_version = content_version
 
     return { uuid: params[:uuid] }.to_json
   end
